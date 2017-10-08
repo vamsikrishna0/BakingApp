@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.android.bakingapp.UI.OnTitleSelectionChangedListener;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
 import com.google.android.exoplayer2.C;
@@ -28,7 +30,8 @@ import com.google.android.exoplayer2.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.example.android.bakingapp.RecipeActivity.RECIPE_JSON;
+import static com.example.android.bakingapp.UI.RecipeActivity.NUMBER_OF_STEPS;
+import static com.example.android.bakingapp.UI.RecipeActivity.RECIPE_JSON;
 
 
 public class RecipeDetailsFragment extends Fragment {
@@ -37,6 +40,7 @@ public class RecipeDetailsFragment extends Fragment {
     private String mUriString;
     private JSONObject mJson;
     TextView mDescriptionTextView;
+    Button mPrevButton, mNextButton;
 
     public SimpleExoPlayerView mPlayerView;
     public SimpleExoPlayer mPlayer;
@@ -51,12 +55,13 @@ public class RecipeDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RecipeDetailsFragment newInstance(int recipeStepPosition, JSONObject recipeJSONObj) {
+    public static RecipeDetailsFragment newInstance(int recipeStepPosition, JSONObject recipeJSONObj, int numberOfSteps) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Log.i("RecipeDetailsFrgment", "here in new instance");
         Bundle args = new Bundle();
         args.putInt(KEY_POSITION, recipeStepPosition);
         args.putString(RECIPE_JSON, recipeJSONObj.toString());
+        args.putInt(NUMBER_OF_STEPS, numberOfSteps);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,6 +75,25 @@ public class RecipeDetailsFragment extends Fragment {
         mPlayerView = view.findViewById(R.id.exoplayer_view);
         mDescriptionTextView = view.findViewById(R.id.recipestep_description_view);
 //        Log.i("RecipeDetailsFrgment", "here in oncreateview");
+
+        mPrevButton = view.findViewById(R.id.prev_step_button);
+        mNextButton = view.findViewById(R.id.next_step_button);
+
+        final OnTitleSelectionChangedListener listener = (OnTitleSelectionChangedListener) getActivity();
+
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.showDetails(mCurStepPosition - 1);
+            }
+        });
+
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.showDetails(mCurStepPosition + 1);
+            }
+        });
         return view;
     }
 
@@ -107,6 +131,11 @@ public class RecipeDetailsFragment extends Fragment {
 
     public void update() {
         try {
+            //Update clickability of prev and next buttons
+            mPrevButton.setEnabled(mCurStepPosition != 0);
+            mNextButton.setEnabled(mCurStepPosition != getArguments().getInt(NUMBER_OF_STEPS) - 1);
+
+            //Showing Ingredients
             if (mCurStepPosition == 0) {
                 mPlayerView.setVisibility(View.GONE);
                 RecipeJsonHelper.getIngredientsStringForRecipe(mJson);
@@ -116,6 +145,7 @@ public class RecipeDetailsFragment extends Fragment {
                 mPlayerView.setVisibility(View.VISIBLE);
             }
 
+            //Get the right step Json object
             JSONObject stepObj = RecipeJsonHelper.getRecipeStepJsonObject(mCurStepPosition, mJson);
             String desc = stepObj.getString(RecipeJsonHelper.LONG_DESCRIPTION);
 //            Log.i("RecipeDetailsFragment", mCurStepPosition + " " + desc);
@@ -139,11 +169,10 @@ public class RecipeDetailsFragment extends Fragment {
                 new DefaultRenderersFactory(getActivity()),
                 new DefaultTrackSelector(),
                 new DefaultLoadControl());
-        if(!mUriString.equals("")){
-        mPlayerView.setPlayer(mPlayer);
-        mPlayer.setPlayWhenReady(playWhenReady);
-        mPlayer.seekTo(currentWindow, playbackPosition);
-
+        if (!mUriString.equals("")) {
+            mPlayerView.setPlayer(mPlayer);
+            mPlayer.setPlayWhenReady(playWhenReady);
+            mPlayer.seekTo(currentWindow, playbackPosition);
 
             Uri uri = Uri.parse(mUriString);
             MediaSource mediaSource = buildMediaSource(uri);
@@ -172,6 +201,7 @@ public class RecipeDetailsFragment extends Fragment {
             releasePlayer();
         }
     }
+
     private void releasePlayer() {
         if (mPlayer != null) {
             playbackPosition = mPlayer.getCurrentPosition();

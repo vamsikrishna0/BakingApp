@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.RecipeActivity;
+import com.example.android.bakingapp.UI.RecipeActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

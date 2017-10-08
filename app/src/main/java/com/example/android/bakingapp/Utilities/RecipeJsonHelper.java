@@ -32,13 +32,14 @@ public class RecipeJsonHelper {
         StringBuilder objString = new StringBuilder();
         JSONArray ingredientsObj = null;
         try {
+            objString.append("Ingredients : ").append(recipeObj.getString("name")).append("\n");
             ingredientsObj = recipeObj.getJSONArray(RecipeJsonHelper.INGREDIENTS);
             for (int i = 0; i < ingredientsObj.length(); i++) {
                 JSONObject ing = ingredientsObj.getJSONObject(i);
-                objString.append(ing.getString(INGREDIENT))
+                objString.append("- ").append(ing.getString(INGREDIENT))
                         .append(" : ").append(ing.getString(QUANTITY)).
                         append(" ").append(ing.getString(MEASURE))
-                        .append(",\n");
+                        .append("\n");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -89,6 +90,9 @@ public class RecipeJsonHelper {
         return data.toArray(new String[data.size()]);
     }
 
+    public static int getNumberOfRecipeSteps(int id){
+        return getRecipeStepDescriptions(id).length;
+    }
     //Get Titles of all recipes as a String[]
     public static String[] getRecipeTitles() {
         JSONArray jsonArray = RecipeJsonHelper.getJson();
