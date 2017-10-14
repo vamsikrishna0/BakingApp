@@ -51,6 +51,7 @@ dependencies {
     // Testing-only dependencies
     androidTestCompile 'com.android.support.test:runner:' + rootProject.runnerVersion;
     androidTestCompile 'com.android.support.test:rules:' + rootProject.rulesVersion;
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:'+ rootProject.espressoVersion;
     androidTestCompile 'com.android.support.test.espresso:espresso-contrib:' + rootProject.espressoVersion;
     androidTestCompile('com.android.support.test.espresso:espresso-core:' + rootProject.espressoVersion, {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -64,4 +65,5 @@ dependencies {
     androidTestCompile 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion;
     androidTestCompile 'com.google.guava:guava:23.1-android'
     androidTestCompile 'com.android.support:design:' + rootProject.supportLibVersion;
+
 }

@@ -155,8 +155,10 @@ public class RecipeDetailsFragment extends Fragment {
                 mUriString = stepObj.getString(RecipeJsonHelper.VIDEO_URL);
             else if (stepObj.has(RecipeJsonHelper.THUMBNAIL_URL) && !stepObj.getString(RecipeJsonHelper.THUMBNAIL_URL).equals(""))
                 mUriString = stepObj.getString(RecipeJsonHelper.THUMBNAIL_URL);
-            else
+            else {
                 mUriString = "";
+                mPlayerView.setVisibility(View.GONE);
+            }
             initializePlayer();
         } catch (JSONException e) {
             e.printStackTrace();

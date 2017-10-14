@@ -46,35 +46,7 @@ public class RecipeTitlesFragment extends ListFragment {
         }else{
             mRecipeStepPosition = 0;
         }
-
-
-
     }
-//
-//    private void showDetails(int recipeStepPosition) {
-//        mRecipeStepPosition = recipeStepPosition;
-//
-//        if(mDualPane){
-//            getListView().setItemChecked(recipeStepPosition, true);
-//
-//            RecipeDetailsFragment details = (RecipeDetailsFragment) getFragmentManager()
-//                    .findFragmentById(R.id.details);
-//            if(details == null || details.getShownIndex() != recipeStepPosition){
-//                details = RecipeDetailsFragment.newInstance(recipeStepPosition, mRecipeJson);
-//
-//                FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                ft.replace(R.id.details, details);
-//                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//                ft.commit();
-//            }
-//        }else{
-//            Intent intent = new Intent();
-//            intent.setClass(getActivity(), RecipeDetailsActivity.class);
-//            intent.putExtra(RECIPE_STEP_POSITION, recipeStepPosition);
-//            intent.putExtra(RECIPE_JSON, mRecipeJson.toString());
-//            startActivity(intent);
-//        }
-//    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -82,12 +54,6 @@ public class RecipeTitlesFragment extends ListFragment {
         OnTitleSelectionChangedListener listener = (OnTitleSelectionChangedListener) getActivity();
         listener.showDetails(position);
     }
-
-    //Any activity which wants to use this fragment has to implement this interface.
-    //That is why, it was moved into Fragment itself, as it is by design part of this fragment.
-//    public interface OnSelectionChangedListener{
-//        void onSelectionChanged(int index, JSONObject recipeData);
-//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
