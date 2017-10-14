@@ -1,11 +1,23 @@
 <resources>
     <string name="app_name">BakingApp</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="previous">PREVIOUS</string>
     <string name="next">NEXT</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="pref_recipe_position_key">recipe_position</string>
+
+    <string name="NUMBER_OF_STEPS">number_of_steps</string>
+    <string name="RECIPE_JSON">recipe_json</string>
+    <string name="RECIPE_POSITION">recipe_position</string>
+    
+    <string name="RESULT_DATA_POSITION">result_position</string>
+    <string name="UPDATE_WIDGETS">update_widgets</string>
+    <string name="RECIPE">recipe</string>
+    <string name="RECIPE_STEP_POSITION">curChoice</string>
+    <!--<string name="NUMBER_OF_STEPS">number_of_steps</string>-->
+    <!--<string name="NUMBER_OF_STEPS">number_of_steps</string>-->
+    <!--<string name="NUMBER_OF_STEPS">number_of_steps</string>-->
+
+
 </resources>

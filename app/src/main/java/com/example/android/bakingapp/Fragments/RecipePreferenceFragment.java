@@ -9,17 +9,15 @@ import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+import butterknife.BindString;
+
 public class RecipePreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-    public static final String UPDATE_WIDGETS = "update_widgets";
+    @BindString(R.string.UPDATE_WIDGETS) public String UPDATE_WIDGETS;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

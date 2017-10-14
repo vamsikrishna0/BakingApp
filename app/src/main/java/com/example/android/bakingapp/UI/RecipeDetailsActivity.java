@@ -12,8 +12,14 @@ import com.example.android.bakingapp.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindString;
+import butterknife.ButterKnife;
+
 public class RecipeDetailsActivity extends AppCompatActivity implements OnTitleSelectionChangedListener{
-    public static final String RESULT_DATA_POSITION = "result_position";
+    @BindString(R.string.RESULT_DATA_POSITION) public String RESULT_DATA_POSITION;
+    @BindString(R.string.NUMBER_OF_STEPS) public String NUMBER_OF_STEPS;
+    @BindString(R.string.RECIPE_JSON) public String RECIPE_JSON;
+    @BindString(R.string.RECIPE_STEP_POSITION) public String RECIPE_STEP_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +33,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements OnTitleS
             RecipeDetailsFragment details = null;
             try {
                 details = RecipeDetailsFragment
-                        .newInstance(extras.getInt(RecipeTitlesFragment.RECIPE_STEP_POSITION),
-                                new JSONObject(extras.getString(RecipeActivity.RECIPE_JSON)),
-                                extras.getInt(RecipeActivity.NUMBER_OF_STEPS));
+                        .newInstance(extras.getInt(RECIPE_STEP_POSITION),
+                                new JSONObject(extras.getString(RECIPE_JSON)),
+                                extras.getInt(NUMBER_OF_STEPS));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

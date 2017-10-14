@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.UI.RecipeActivity;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -21,7 +22,7 @@ import butterknife.ButterKnife;
 
 public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePageViewHolder> {
     private String[] mDataSet;
-    public static final String RECIPE = "recipe";
+    @BindString(R.string.RECIPE) public String RECIPE;
 
     public HomePageAdapter(String[] recipeTitles){
         mDataSet = recipeTitles;

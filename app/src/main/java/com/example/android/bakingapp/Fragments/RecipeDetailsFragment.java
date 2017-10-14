@@ -30,19 +30,24 @@ import com.google.android.exoplayer2.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.example.android.bakingapp.UI.RecipeActivity.NUMBER_OF_STEPS;
-import static com.example.android.bakingapp.UI.RecipeActivity.RECIPE_JSON;
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+import static com.example.android.bakingapp.MainActivity.resources;
 
 public class RecipeDetailsFragment extends Fragment {
 
+    @BindString(R.string.NUMBER_OF_STEPS) public String NUMBER_OF_STEPS;
+    @BindString(R.string.RECIPE_JSON) public String RECIPE_JSON;
     private int mCurStepPosition = -1;
     private String mUriString;
     private JSONObject mJson;
-    TextView mDescriptionTextView;
-    Button mPrevButton, mNextButton;
+    @BindView(R.id.recipestep_description_view) TextView mDescriptionTextView;
+    @BindView(R.id.prev_step_button) Button mPrevButton;
+    @BindView(R.id.next_step_button) Button mNextButton;
 
-    public SimpleExoPlayerView mPlayerView;
+    @BindView(R.id.exoplayer_view) public SimpleExoPlayerView mPlayerView;
     public SimpleExoPlayer mPlayer;
 
     public boolean playWhenReady = true;
@@ -57,11 +62,10 @@ public class RecipeDetailsFragment extends Fragment {
 
     public static RecipeDetailsFragment newInstance(int recipeStepPosition, JSONObject recipeJSONObj, int numberOfSteps) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
-        Log.i("RecipeDetailsFrgment", "here in new instance");
         Bundle args = new Bundle();
         args.putInt(KEY_POSITION, recipeStepPosition);
-        args.putString(RECIPE_JSON, recipeJSONObj.toString());
-        args.putInt(NUMBER_OF_STEPS, numberOfSteps);
+        args.putString(resources.getString(R.string.RECIPE_JSON), recipeJSONObj.toString());
+        args.putInt(resources.getString(R.string.NUMBER_OF_STEPS), numberOfSteps);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,12 +76,7 @@ public class RecipeDetailsFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe_details, container, false);
-        mPlayerView = view.findViewById(R.id.exoplayer_view);
-        mDescriptionTextView = view.findViewById(R.id.recipestep_description_view);
-//        Log.i("RecipeDetailsFrgment", "here in oncreateview");
-
-        mPrevButton = view.findViewById(R.id.prev_step_button);
-        mNextButton = view.findViewById(R.id.next_step_button);
+        ButterKnife.bind(this, view);
 
         final OnTitleSelectionChangedListener listener = (OnTitleSelectionChangedListener) getActivity();
 
@@ -148,7 +147,6 @@ public class RecipeDetailsFragment extends Fragment {
             //Get the right step Json object
             JSONObject stepObj = RecipeJsonHelper.getRecipeStepJsonObject(mCurStepPosition, mJson);
             String desc = stepObj.getString(RecipeJsonHelper.LONG_DESCRIPTION);
-//            Log.i("RecipeDetailsFragment", mCurStepPosition + " " + desc);
             mDescriptionTextView.setText(desc);
 
             if (stepObj.has(RecipeJsonHelper.VIDEO_URL) && !stepObj.getString(RecipeJsonHelper.VIDEO_URL).equals(""))

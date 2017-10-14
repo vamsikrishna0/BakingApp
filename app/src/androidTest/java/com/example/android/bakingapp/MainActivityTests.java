@@ -45,12 +45,12 @@ import static org.hamcrest.Matchers.hasEntry;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTests {
-    public static final int CHEESECAKE_POSITION = 3;
+    static final int CHEESECAKE_POSITION = 3;
 
-    public static final String CHEESECAKE = "Cheesecake";
+    private static final String CHEESECAKE = "Cheesecake";
 
-    public static final String CHEESECAKE_STEP7_STRING = "Add heavy cream and vanilla.";
-    public static final int MINIMUM_WIDTH_IN_DP_FOR_TWO_PANE = 600;
+    static final String CHEESECAKE_STEP7_STRING = "Add heavy cream and vanilla.";
+
     @Rule
     public IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<MainActivity>(
             MainActivity.class);

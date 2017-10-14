@@ -41,10 +41,10 @@ import static org.hamcrest.Matchers.not;
 //ActivityTestRule set up. One class for testing, one activity
 public class RecipeActivityTests {
 
-    public static final String CHEESECAKE_STEP9_STRING = "Bake the cheesecake.";
-    public static final String CHEESECAKE_STEP9_DESC_STRING = "9. Bake the cheesecake on a middle rack of the oven above the roasting pan full of water for 50 minutes. ";
-    public static final String CHEESECAKE_STEP7_DESC_STRING = "7. Add the cream and remaining tablespoon of vanilla to the batter and beat on medium-low speed until just incorporated. ";
-    public static final String RECIPE_DETAILS_A_SHORTNAME= ".UI.RecipeDetailsActivity";
+    private static final String CHEESECAKE_STEP9_STRING = "Bake the cheesecake.";
+    private static final String CHEESECAKE_STEP9_DESC_STRING = "9. Bake the cheesecake on a middle rack of the oven above the roasting pan full of water for 50 minutes. ";
+    private static final String CHEESECAKE_STEP7_DESC_STRING = "7. Add the cream and remaining tablespoon of vanilla to the batter and beat on medium-low speed until just incorporated. ";
+    private static final String RECIPE_DETAILS_A_SHORTNAME= ".UI.RecipeDetailsActivity";
     @Rule
     public ActivityTestRule<RecipeActivity> mActivityRule = new ActivityTestRule<RecipeActivity>
             (RecipeActivity.class){

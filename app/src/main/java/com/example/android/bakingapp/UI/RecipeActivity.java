@@ -17,13 +17,18 @@ import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.example.android.bakingapp.Fragments.RecipeTitlesFragment.RECIPE_STEP_POSITION;
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class RecipeActivity extends AppCompatActivity implements OnTitleSelectionChangedListener {
-    public static final String NUMBER_OF_STEPS = "number_of_steps";
-    public static final String RECIPE_JSON = "recipe_json";
-    public static final String RECIPE_POSITION = "recipe_position";
-    public static final int REQUEST_CODE = 3;
+    @BindString(R.string.NUMBER_OF_STEPS) public String NUMBER_OF_STEPS;
+    @BindString(R.string.RECIPE_JSON) public String RECIPE_JSON;
+    @BindString(R.string.RECIPE_POSITION) public String RECIPE_POSITION;
+    @BindString(R.string.RECIPE) public String RECIPE;
+    @BindString(R.string.RECIPE_STEP_POSITION) public String RECIPE_STEP_POSITION;
+    public static int REQUEST_CODE = 3;
 
     boolean mDualPane;
     JSONObject mRecipeJson;
@@ -34,7 +39,6 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-
         if(savedInstanceState != null){
             mRecipePosition = savedInstanceState.getInt(RECIPE_POSITION, 0);
             mNoOfRecipeSteps = savedInstanceState.getInt(NUMBER_OF_STEPS);
@@ -44,7 +48,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
                 e.printStackTrace();
             }
         }else{
-            mRecipePosition = getIntent().getIntExtra(HomePageAdapter.RECIPE, 0);
+            mRecipePosition = getIntent().getIntExtra(RECIPE, 0);
             mRecipeJson = RecipeJsonHelper.getRecipeJsonObject(mRecipePosition);
             mNoOfRecipeSteps = RecipeJsonHelper.getNumberOfRecipeSteps(mRecipePosition);
         }
@@ -53,7 +57,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
         View detailsFrame = findViewById(R.id.details);
         mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
-        if (mDualPane) { 
+        if (mDualPane) {
 
                 RecipeTitlesFragment titlesFragment = (RecipeTitlesFragment)
                         getSupportFragmentManager().findFragmentById(R.id.titles);
@@ -69,12 +73,10 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
     }
 
     public void showDetails(int recipeStepPosition) {
-        //mRecipeStepPosition = recipeStepPosition;
         if(recipeStepPosition < 0 || recipeStepPosition >= mNoOfRecipeSteps)
             return;
 
         if(mDualPane){
-            //getListView().setItemChecked(recipeStepPosition, true);
 
             RecipeDetailsFragment details = (RecipeDetailsFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.details);
@@ -107,27 +109,9 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE){
             if(resultCode == Activity.RESULT_OK){
-                int temp = data.getIntExtra(RecipeDetailsActivity.RESULT_DATA_POSITION, 0);
+                int temp = data.getIntExtra(getString(R.string.RESULT_DATA_POSITION), 0);
                 showDetails(temp);
             }
         }
     }
-    //    public void onSelectionChanged(int index, JSONObject recipeData) {
-//        RecipeDetailsFragment detailFragment = (RecipeDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.details);
-//        //If two pane?
-//        if(detailFragment != null){
-//            Log.i("RecipeActivity", index+"");
-//            detailFragment.update(index, recipeData);
-//        }else{
-//            RecipeDetailsFragment newDetailsFragment = new RecipeDetailsFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(TITLE_INDEX, index);
-//            args.putString(RECIPE_JSON, recipeData.toString());
-//            newDetailsFragment.setArguments(args);
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.singlepane_container, newDetailsFragment)
-//                    .addToBackStack(null)
-//                    .commit();
-//        }
-//  }
 }

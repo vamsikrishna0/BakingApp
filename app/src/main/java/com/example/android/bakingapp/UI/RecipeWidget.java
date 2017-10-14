@@ -27,7 +27,8 @@ public class RecipeWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String recipe_position = preferences.getString(context.getString(R.string.pref_recipe_position_key), "0");
+        String recipe_position = preferences.getString(
+                context.getString(R.string.pref_recipe_position_key), "0");
         int pos = Integer.parseInt(recipe_position);
         String widgetText = RecipeJsonHelper
                 .getIngredientsStringForRecipe(RecipeJsonHelper.getRecipeJsonObject(pos));
@@ -48,19 +49,10 @@ public class RecipeWidget extends AppWidgetProvider {
         }
     }
 
-    @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent.hasExtra(RecipePreferenceFragment.UPDATE_WIDGETS)){
+        if(intent.hasExtra(context.getString(R.string.UPDATE_WIDGETS))){
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             int[] ids = manager.getAppWidgetIds(new ComponentName(context, RecipeWidget.class));
             onUpdate(context, manager, ids);

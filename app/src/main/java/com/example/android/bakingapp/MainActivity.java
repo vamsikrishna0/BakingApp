@@ -1,5 +1,6 @@
 package com.example.android.bakingapp;
 
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    public static Resources resources;
 
     @BindView(R.id.homepage_recycler_view)
     RecyclerView mRecyclerView;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @BindBool(R.bool.isTablet)
     boolean isTablet;
     public static final int numOfSpans = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,5 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter = new HomePageAdapter(RecipeJsonHelper.getRecipeTitles());
         mRecyclerView.setAdapter(mAdapter);
+        resources = getResources();
     }
 }
