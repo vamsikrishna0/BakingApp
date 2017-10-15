@@ -2,9 +2,11 @@ package com.example.android.bakingapp.UI;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -18,16 +20,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.BindString;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class RecipeActivity extends AppCompatActivity implements OnTitleSelectionChangedListener {
-    @BindString(R.string.NUMBER_OF_STEPS) public String NUMBER_OF_STEPS;
-    @BindString(R.string.RECIPE_JSON) public String RECIPE_JSON;
-    @BindString(R.string.RECIPE_POSITION) public String RECIPE_POSITION;
-    @BindString(R.string.RECIPE) public String RECIPE;
-    @BindString(R.string.RECIPE_STEP_POSITION) public String RECIPE_STEP_POSITION;
+
+    String NUMBER_OF_STEPS;
+    String RECIPE_JSON ;
+    String RECIPE_POSITION;
+    String RECIPE;
+    String RECIPE_STEP_POSITION;
+    String CHEESECAKE_STEP7_STRING;
+
     public static int REQUEST_CODE = 3;
 
     boolean mDualPane;
@@ -39,6 +43,12 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        NUMBER_OF_STEPS = getString(R.string.NUMBER_OF_STEPS);
+        RECIPE_JSON = getString(R.string.RECIPE_JSON);
+         RECIPE_POSITION = getString(R.string.RECIPE_POSITION);
+         RECIPE = getString(R.string.RECIPE);
+         RECIPE_STEP_POSITION = getString(R.string.RECIPE_STEP_POSITION);
+         CHEESECAKE_STEP7_STRING = getString(R.string.CHEESECAKE_STEP7_STRING);
         if(savedInstanceState != null){
             mRecipePosition = savedInstanceState.getInt(RECIPE_POSITION, 0);
             mNoOfRecipeSteps = savedInstanceState.getInt(NUMBER_OF_STEPS);
@@ -48,7 +58,20 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
                 e.printStackTrace();
             }
         }else{
-            mRecipePosition = getIntent().getIntExtra(RECIPE, 0);
+            if(RECIPE_STEP_POSITION == null)
+            Log.i("Blahhhh", "Not sending properly");
+            else
+                Log.i("Blahhhh", "sending properly" + RECIPE +" "+ getIntent().getExtras().getInt(RECIPE));
+            if(RECIPE == null)
+                Log.i("Blahhhh", "Not sending properly");
+            else
+                Log.i("Blahhhh", "sending properly" + RECIPE +" "+ getIntent().getExtras().getInt(RECIPE));
+            if(RECIPE_POSITION == null)
+                Log.i("Blahhhh", "Not sending properly");
+            else
+                Log.i("Blahhhh", "sending properly" + RECIPE +" "+ getIntent().getExtras().getInt(RECIPE));
+
+            mRecipePosition = getIntent().getExtras().getInt(RECIPE);
             mRecipeJson = RecipeJsonHelper.getRecipeJsonObject(mRecipePosition);
             mNoOfRecipeSteps = RecipeJsonHelper.getNumberOfRecipeSteps(mRecipePosition);
         }
@@ -81,7 +104,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
             RecipeDetailsFragment details = (RecipeDetailsFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.details);
             if(details == null || details.getShownIndex() != recipeStepPosition){
-                details = RecipeDetailsFragment.newInstance(recipeStepPosition, mRecipeJson, mNoOfRecipeSteps);
+                details = RecipeDetailsFragment.newInstance(recipeStepPosition, mRecipeJson, mNoOfRecipeSteps, this);
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.details, details);

@@ -19,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    public static Resources resources;
 
     @BindView(R.id.homepage_recycler_view)
     RecyclerView mRecyclerView;
@@ -47,6 +46,5 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter = new HomePageAdapter(RecipeJsonHelper.getRecipeTitles());
         mRecyclerView.setAdapter(mAdapter);
-        resources = getResources();
     }
 }

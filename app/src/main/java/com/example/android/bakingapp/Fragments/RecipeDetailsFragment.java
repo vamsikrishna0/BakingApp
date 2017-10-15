@@ -1,5 +1,6 @@
 package com.example.android.bakingapp.Fragments;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,8 +35,6 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.android.bakingapp.MainActivity.resources;
-
 public class RecipeDetailsFragment extends Fragment {
 
     @BindString(R.string.NUMBER_OF_STEPS) public String NUMBER_OF_STEPS;
@@ -60,12 +59,13 @@ public class RecipeDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RecipeDetailsFragment newInstance(int recipeStepPosition, JSONObject recipeJSONObj, int numberOfSteps) {
+    public static RecipeDetailsFragment newInstance(int recipeStepPosition, JSONObject recipeJSONObj,
+                                                    int numberOfSteps, Activity activity) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(KEY_POSITION, recipeStepPosition);
-        args.putString(resources.getString(R.string.RECIPE_JSON), recipeJSONObj.toString());
-        args.putInt(resources.getString(R.string.NUMBER_OF_STEPS), numberOfSteps);
+        args.putString(activity.getString(R.string.RECIPE_JSON), recipeJSONObj.toString());
+        args.putInt(activity.getString(R.string.NUMBER_OF_STEPS), numberOfSteps);
         fragment.setArguments(args);
         return fragment;
     }

@@ -1,5 +1,6 @@
 package com.example.android.bakingapp.Utilities;
 
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
@@ -56,6 +57,8 @@ public class RecipeJsonHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        Log.i("Helper", id + " "+ recipeObject.toString());
         return recipeObject;
     }
 
@@ -604,14 +607,14 @@ public class RecipeJsonHelper {
             "      {\n" +
             "        \"id\": 6,\n" +
             "        \"shortDescription\": \"Add eggs.\",\n" +
-            "        \"description\": \"6. Scrape down the sides of the pan. Add in the eggs one at a time, beating each one on medium-low speed just until incorporated. Scrape down the sides and bottom of the bowl. Add in both egg yolks and beat until just incorporated. \",\n" +
+            "        \"description\": \"6. Scrape down the sides of the pan. Add in the eggs one at a time, beating each one on medium-low speed just until incorporated. Scrape down the sides and bottom of the bowl. Add in both egg yolks and beat until just incorporated.\",\n" +
             "        \"videoURL\": \"https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffdb55_4-add-eggs-mix-cheesecake/4-add-eggs-mix-cheesecake.mp4\",\n" +
             "        \"thumbnailURL\": \"\"\n" +
             "      },\n" +
             "      {\n" +
             "        \"id\": 7,\n" +
             "        \"shortDescription\": \"Add heavy cream and vanilla.\",\n" +
-            "        \"description\": \"7. Add the cream and remaining tablespoon of vanilla to the batter and beat on medium-low speed until just incorporated. \",\n" +
+            "        \"description\": \"7. Add the cream and remaining tablespoon of vanilla to the batter and beat on medium-low speed until just incorporated.\",\n" +
             "        \"videoURL\": \"https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffdb72_5-mix-vanilla-cream-together-cheesecake/5-mix-vanilla-cream-together-cheesecake.mp4\",\n" +
             "        \"thumbnailURL\": \"\"\n" +
             "      },\n" +
@@ -625,7 +628,7 @@ public class RecipeJsonHelper {
             "      {\n" +
             "        \"id\": 9,\n" +
             "        \"shortDescription\": \"Bake the cheesecake.\",\n" +
-            "        \"description\": \"9. Bake the cheesecake on a middle rack of the oven above the roasting pan full of water for 50 minutes. \",\n" +
+            "        \"description\": \"9. Bake the cheesecake on a middle rack of the oven above the roasting pan full of water for 50 minutes.\",\n" +
             "        \"videoURL\": \"\",\n" +
             "        \"thumbnailURL\": \"\"\n" +
             "      },\n" +
@@ -639,7 +642,7 @@ public class RecipeJsonHelper {
             "      {\n" +
             "        \"id\": 11,\n" +
             "        \"shortDescription\": \"Remove from oven and cool at room temperature.\",\n" +
-            "        \"description\": \"11. Take the cheesecake out of the oven. It should look pale yellow or golden on top and be set but still slightly jiggly. Let it cool to room temperature. \",\n" +
+            "        \"description\": \"11. Take the cheesecake out of the oven. It should look pale yellow or golden on top and be set but still slightly jiggly. Let it cool to room temperature.\",\n" +
             "        \"videoURL\": \"\",\n" +
             "        \"thumbnailURL\": \"\"\n" +
             "      },\n" +

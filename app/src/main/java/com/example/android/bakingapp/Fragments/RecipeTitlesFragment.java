@@ -15,7 +15,6 @@ import com.example.android.bakingapp.UI.OnTitleSelectionChangedListener;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
 
-import butterknife.BindString;
 
 public class RecipeTitlesFragment extends ListFragment {
 
@@ -26,16 +25,17 @@ public class RecipeTitlesFragment extends ListFragment {
     int mRecipeStepPosition;
 
 
-    @BindString(R.string.RECIPE_STEP_POSITION) public String RECIPE_STEP_POSITION;
-    @BindString(R.string.RECIPE) public String RECIPE;
+    public String RECIPE_STEP_POSITION;
+    public String RECIPE;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        RECIPE_STEP_POSITION = getString(R.string.RECIPE_STEP_POSITION);
+        RECIPE = getString(R.string.RECIPE);
         // Set the adapter
         mRecipePosition = getActivity().getIntent()
                 .getIntExtra(RECIPE, 0);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.simple_list_item,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.simple_list_item,
                 RecipeJsonHelper.getRecipeStepDescriptions(mRecipePosition));
         setListAdapter(adapter);
 

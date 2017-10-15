@@ -35,7 +35,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements OnTitleS
                 details = RecipeDetailsFragment
                         .newInstance(extras.getInt(RECIPE_STEP_POSITION),
                                 new JSONObject(extras.getString(RECIPE_JSON)),
-                                extras.getInt(NUMBER_OF_STEPS));
+                                extras.getInt(NUMBER_OF_STEPS), this);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

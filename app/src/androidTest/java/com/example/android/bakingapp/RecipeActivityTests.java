@@ -2,21 +2,28 @@ package com.example.android.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.example.android.bakingapp.Adapters.HomePageAdapter;
 import com.example.android.bakingapp.UI.RecipeActivity;
 import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import butterknife.BindString;
+import butterknife.ButterKnife;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -28,10 +35,8 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.android.bakingapp.Fragments.RecipeTitlesFragment.RECIPE_STEP_POSITION;
 import static com.example.android.bakingapp.MainActivityTests.CHEESECAKE_POSITION;
-import static com.example.android.bakingapp.UI.RecipeActivity.NUMBER_OF_STEPS;
-import static com.example.android.bakingapp.UI.RecipeActivity.RECIPE_JSON;
+import static org.hamcrest.EasyMock2Matchers.equalTo;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -40,20 +45,24 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 //ActivityTestRule set up. One class for testing, one activity
 public class RecipeActivityTests {
+    Resources res = getInstrumentation().getTargetContext().getResources();
+    public String RECIPE = res.getString(R.string.RECIPE);
+    public String RECIPE_STEP_POSITION = res.getString(R.string.RECIPE_STEP_POSITION);
+    public String CHEESECAKE_STEP7_STRING = res.getString(R.string.CHEESECAKE_STEP7_STRING);
 
-    private static final String CHEESECAKE_STEP9_STRING = "Bake the cheesecake.";
-    private static final String CHEESECAKE_STEP9_DESC_STRING = "9. Bake the cheesecake on a middle rack of the oven above the roasting pan full of water for 50 minutes. ";
-    private static final String CHEESECAKE_STEP7_DESC_STRING = "7. Add the cream and remaining tablespoon of vanilla to the batter and beat on medium-low speed until just incorporated. ";
+    public String CHEESECAKE_STEP9_STRING = res.getString(R.string.CHEESECAKE_STEP9_STRING) ;
+    private String CHEESECAKE_STEP9_DESC_STRING = res.getString(R.string.CHEESECAKE_STEP9_DESC_STRING);
+    private String CHEESECAKE_STEP7_DESC_STRING = res.getString(R.string.CHEESECAKE_STEP7_DESC_STRING);
     private static final String RECIPE_DETAILS_A_SHORTNAME= ".UI.RecipeDetailsActivity";
     @Rule
     public ActivityTestRule<RecipeActivity> mActivityRule = new ActivityTestRule<RecipeActivity>
             (RecipeActivity.class){
         @Override
         protected Intent getActivityIntent() {
-            Context targetContext = InstrumentationRegistry.getInstrumentation()
+            Context targetContext = getInstrumentation()
                     .getTargetContext();
             Intent result = new Intent(targetContext, RecipeActivity.class);
-            result.putExtra(HomePageAdapter.RECIPE, CHEESECAKE_POSITION);
+            result.putExtra(RECIPE, CHEESECAKE_POSITION);
             return result;
         }
     };
@@ -63,13 +72,13 @@ public class RecipeActivityTests {
     @Before
     public void setUp(){
         Intents.init();
-        isTablet = mActivityRule.getActivity().getResources().getBoolean(R.bool.isTablet);
+
+        isTablet = res.getBoolean(R.bool.isTablet);
     }
 
     @Test
     public void checkIfTwoPanesDisplayedInTabletMode(){
         if(isTablet){
-//            onView(allOf(withText(RecipeJsonHelper.INGREDIENTS), )).
             onData(allOf(is(instanceOf(String.class)), is(RecipeJsonHelper.INGREDIENTS)))
                     .check(matches(isDisplayed()));
 
@@ -83,7 +92,7 @@ public class RecipeActivityTests {
 
     @Test
     public void checkIfClickingOnAStep_withVideoURL_OpensTheProperFragment(){
-        onData(allOf(is(instanceOf(String.class)), is(MainActivityTests.CHEESECAKE_STEP7_STRING)))
+        onData(allOf(is(instanceOf(String.class)), is(CHEESECAKE_STEP7_STRING)))
                 .perform(click());
 
         if(isTablet){
@@ -118,4 +127,5 @@ public class RecipeActivityTests {
     public void tearDown(){
         Intents.release();
     }
+
 }

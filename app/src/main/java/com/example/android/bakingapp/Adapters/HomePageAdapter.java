@@ -3,6 +3,7 @@ package com.example.android.bakingapp.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,6 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Vamsi on 9/7/2017.
- */
 
 public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePageViewHolder> {
     private String[] mDataSet;
@@ -45,6 +43,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePa
     }
 
     class HomePageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        @BindString(R.string.RECIPE) public String RECIPE;
+
         private final Context mContext;
         @BindView(R.id.homepage_textview)
         TextView mTextView;
@@ -59,6 +59,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePa
         public void onClick(View view) {
             //Intent takes you to the recipe activity
             Intent intent = new Intent(mContext, RecipeActivity.class);
+            if(RECIPE == null)
+                Log.i("Blahhhh2", "Not sending properly");
+            else
+                Log.i("Blahhhh2", "sending properly" + getAdapterPosition());
             intent.putExtra(RECIPE, getAdapterPosition());
             mContext.startActivity(intent);
         }

@@ -3,6 +3,7 @@ package com.example.android.bakingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.UiController;
@@ -24,6 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onIdle;
 import static android.support.test.espresso.Espresso.onView;
@@ -37,6 +39,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.android.bakingapp.R.string.RECIPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -49,12 +52,11 @@ public class MainActivityTests {
 
     private static final String CHEESECAKE = "Cheesecake";
 
-    static final String CHEESECAKE_STEP7_STRING = "Add heavy cream and vanilla.";
-
     @Rule
     public IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<MainActivity>(
             MainActivity.class);
 
+    Resources res = getInstrumentation().getTargetContext().getResources();
     //Only tests cheesecake, as an example
     @Test
     public void scrollToCheeseCake_checkIfItOpensTheCorrectRecipeActivity(){
@@ -63,7 +65,7 @@ public class MainActivityTests {
 
         onView(allOf(withText(CHEESECAKE), withId(R.id.homepage_textview)))
                 .perform(click());
-        intended(allOf(hasExtra(HomePageAdapter.RECIPE, CHEESECAKE_POSITION),
+        intended(allOf(hasExtra(res.getString(R.string.RECIPE), CHEESECAKE_POSITION),
                 hasComponent(hasShortClassName(".UI.RecipeActivity"))));
     }
     @Test
@@ -74,5 +76,6 @@ public class MainActivityTests {
 
         onView(withText(CHEESECAKE)).check(matches(isDisplayed()));
     }
+
 }
 
