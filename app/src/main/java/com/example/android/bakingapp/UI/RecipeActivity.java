@@ -2,7 +2,6 @@ package com.example.android.bakingapp.UI;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,17 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-import com.example.android.bakingapp.Adapters.HomePageAdapter;
 import com.example.android.bakingapp.Fragments.RecipeDetailsFragment;
 import com.example.android.bakingapp.Fragments.RecipeTitlesFragment;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
+import com.example.android.bakingapp.Utilities.data.Recipe;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import butterknife.BindString;
-import butterknife.ButterKnife;
+import java.io.Serializable;
 
 
 public class RecipeActivity extends AppCompatActivity implements OnTitleSelectionChangedListener {
@@ -35,7 +30,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
     public static int REQUEST_CODE = 3;
 
     boolean mDualPane;
-    JSONObject mRecipeJson;
+    Recipe mRecipeObj;
     int mRecipePosition;
     int mNoOfRecipeSteps;
 
@@ -52,11 +47,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
         if(savedInstanceState != null){
             mRecipePosition = savedInstanceState.getInt(RECIPE_POSITION, 0);
             mNoOfRecipeSteps = savedInstanceState.getInt(NUMBER_OF_STEPS);
-            try {
-                mRecipeJson = new JSONObject(savedInstanceState.getString(RECIPE_JSON));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            mRecipeObj = (Recipe) savedInstanceState.getSerializable(RECIPE_JSON);
         }else{
             if(RECIPE_STEP_POSITION == null)
             Log.i("Blahhhh", "Not sending properly");
@@ -72,7 +63,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
                 Log.i("Blahhhh", "sending properly" + RECIPE +" "+ getIntent().getExtras().getInt(RECIPE));
 
             mRecipePosition = getIntent().getExtras().getInt(RECIPE);
-            mRecipeJson = RecipeJsonHelper.getRecipeJsonObject(mRecipePosition);
+            mRecipeObj = RecipeJsonHelper.getRecipeObject(mRecipePosition);
             mNoOfRecipeSteps = RecipeJsonHelper.getNumberOfRecipeSteps(mRecipePosition);
         }
 
@@ -104,7 +95,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
             RecipeDetailsFragment details = (RecipeDetailsFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.details);
             if(details == null || details.getShownIndex() != recipeStepPosition){
-                details = RecipeDetailsFragment.newInstance(recipeStepPosition, mRecipeJson, mNoOfRecipeSteps, this);
+                details = RecipeDetailsFragment.newInstance(recipeStepPosition, mRecipeObj, mNoOfRecipeSteps, this);
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.details, details);
@@ -115,7 +106,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
             Intent intent = new Intent();
             intent.setClass(this, RecipeDetailsActivity.class);
             intent.putExtra(RECIPE_STEP_POSITION, recipeStepPosition);
-            intent.putExtra(RECIPE_JSON, mRecipeJson.toString());
+            intent.putExtra(RECIPE_JSON, (Serializable) mRecipeObj);
             intent.putExtra(NUMBER_OF_STEPS, mNoOfRecipeSteps);
             startActivityForResult(intent, REQUEST_CODE);
         }
@@ -124,7 +115,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(RECIPE_POSITION, mRecipePosition);
-        outState.putString(RECIPE_JSON, mRecipeJson.toString());
+        outState.putSerializable(RECIPE_JSON, (Serializable) mRecipeObj);
         outState.putInt(NUMBER_OF_STEPS, mNoOfRecipeSteps);
     }
 

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.example.android.bakingapp.UI.OnTitleSelectionChangedListener;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
+import com.example.android.bakingapp.Utilities.data.Recipe;
+import com.example.android.bakingapp.Utilities.data.Step;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -31,9 +33,13 @@ import com.google.android.exoplayer2.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.R.attr.thumbnail;
 
 public class RecipeDetailsFragment extends Fragment {
 
@@ -41,7 +47,8 @@ public class RecipeDetailsFragment extends Fragment {
     @BindString(R.string.RECIPE_JSON) public String RECIPE_JSON;
     private int mCurStepPosition = -1;
     private String mUriString;
-    private JSONObject mJson;
+    private String mThumbnailURL;
+    private Recipe mJson;
     @BindView(R.id.recipestep_description_view) TextView mDescriptionTextView;
     @BindView(R.id.prev_step_button) Button mPrevButton;
     @BindView(R.id.next_step_button) Button mNextButton;
@@ -59,12 +66,12 @@ public class RecipeDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RecipeDetailsFragment newInstance(int recipeStepPosition, JSONObject recipeJSONObj,
+    public static RecipeDetailsFragment newInstance(int recipeStepPosition, Recipe recipeObj,
                                                     int numberOfSteps, Activity activity) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(KEY_POSITION, recipeStepPosition);
-        args.putString(activity.getString(R.string.RECIPE_JSON), recipeJSONObj.toString());
+        args.putSerializable(activity.getString(R.string.RECIPE_JSON), (Serializable) recipeObj);
         args.putInt(activity.getString(R.string.NUMBER_OF_STEPS), numberOfSteps);
         fragment.setArguments(args);
         return fragment;
@@ -100,18 +107,17 @@ public class RecipeDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        try {
-            if (savedInstanceState != null) {
-                mCurStepPosition = savedInstanceState.getInt(KEY_POSITION);
-                mJson = new JSONObject(savedInstanceState.getString(RECIPE_JSON));
-                update();
-            } else if (getArguments() != null) {
-                mCurStepPosition = getArguments().getInt(KEY_POSITION);
-                mJson = new JSONObject(getArguments().getString(RECIPE_JSON));
-                update();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (savedInstanceState != null) {
+            mCurStepPosition = savedInstanceState.getInt(KEY_POSITION);
+            mJson = (Recipe)savedInstanceState.getSerializable(RECIPE_JSON);
+            playbackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION);
+            currentWindow = savedInstanceState.getInt(CURRENT_WINDOW_INDEX);
+            playWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
+            update();
+        } else if (getArguments() != null) {
+            mCurStepPosition = getArguments().getInt(KEY_POSITION);
+            mJson = (Recipe) getArguments().getSerializable(RECIPE_JSON);
+            update();
         }
     }
 
@@ -119,47 +125,47 @@ public class RecipeDetailsFragment extends Fragment {
         return getArguments().getInt(KEY_POSITION, 0);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // Save the current description selection in case we need to recreate the fragment
-        outState.putInt(KEY_POSITION, mCurStepPosition);
-        outState.putString(RECIPE_JSON, mJson.toString());
-    }
 
     public void update() {
-        try {
-            //Update clickability of prev and next buttons
-            mPrevButton.setEnabled(mCurStepPosition != 0);
-            mNextButton.setEnabled(mCurStepPosition != getArguments().getInt(NUMBER_OF_STEPS) - 1);
+        //Update clickability of prev and next buttons
+        mPrevButton.setEnabled(mCurStepPosition != 0);
+        mNextButton.setEnabled(mCurStepPosition != getArguments().getInt(NUMBER_OF_STEPS) - 1);
 
-            //Showing Ingredients
-            if (mCurStepPosition == 0) {
-                mPlayerView.setVisibility(View.GONE);
-                RecipeJsonHelper.getIngredientsStringForRecipe(mJson);
-                mDescriptionTextView.setText(RecipeJsonHelper.getIngredientsStringForRecipe(mJson));
-                return;
-            } else {
-                mPlayerView.setVisibility(View.VISIBLE);
-            }
+        //Showing Ingredients
+        if (mCurStepPosition == 0) {
+            mPlayerView.setVisibility(View.GONE);
+            mDescriptionTextView.setText(RecipeJsonHelper.getIngredientsStringForRecipe(mJson));
+            return;
+        } else {
+            mPlayerView.setVisibility(View.VISIBLE);
+        }
 
-            //Get the right step Json object
-            JSONObject stepObj = RecipeJsonHelper.getRecipeStepJsonObject(mCurStepPosition, mJson);
-            String desc = stepObj.getString(RecipeJsonHelper.LONG_DESCRIPTION);
-            mDescriptionTextView.setText(desc);
+        //Get the right step Json object
+        Step stepObj = RecipeJsonHelper.getRecipeStepJsonObject(mCurStepPosition, mJson);
+        String desc = stepObj.getDescription();
+        mDescriptionTextView.setText(desc);
 
-            if (stepObj.has(RecipeJsonHelper.VIDEO_URL) && !stepObj.getString(RecipeJsonHelper.VIDEO_URL).equals(""))
-                mUriString = stepObj.getString(RecipeJsonHelper.VIDEO_URL);
-            else if (stepObj.has(RecipeJsonHelper.THUMBNAIL_URL) && !stepObj.getString(RecipeJsonHelper.THUMBNAIL_URL).equals(""))
-                mUriString = stepObj.getString(RecipeJsonHelper.THUMBNAIL_URL);
-            else {
+        setURLs(stepObj.getThumbnailURL(), stepObj.getVideoURL());
+        if(mUriString.equals(""))
+            mPlayerView.setVisibility(View.GONE);
+
+        initializePlayer();
+    }
+
+    public void setURLs(String thumbnailURL, String videoUrl){
+        mThumbnailURL = thumbnailURL;
+        if (!videoUrl.equals(""))
+            mUriString = videoUrl;
+        else if (!thumbnailURL.equals("")) {
+            if(thumbnailURL.endsWith(".mp4")) {
+                mUriString = thumbnailURL;
+                mThumbnailURL = "";
+            }else {
                 mUriString = "";
-                mPlayerView.setVisibility(View.GONE);
             }
-            initializePlayer();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }
+        else {
+            mUriString = "";
         }
     }
 
@@ -189,18 +195,9 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
+        releasePlayer();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
-    }
 
     private void releasePlayer() {
         if (mPlayer != null) {
@@ -211,4 +208,19 @@ public class RecipeDetailsFragment extends Fragment {
             mPlayer = null;
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save the current description selection in case we need to recreate the fragment
+        outState.putInt(KEY_POSITION, mCurStepPosition);
+        outState.putSerializable(RECIPE_JSON, (Serializable) mJson);
+        outState.putLong(CURRENT_PLAYBACK_POSITION, playbackPosition);
+        outState.putBoolean(PLAY_WHEN_READY, playWhenReady);
+        outState.putInt(CURRENT_WINDOW_INDEX, currentWindow);
+    }
+    public static final String CURRENT_PLAYBACK_POSITION = "CurrentPlaybackPosition";
+    public static final String CURRENT_WINDOW_INDEX = "CurrentWindowIndex";
+    public static final String PLAY_WHEN_READY = "PlayWhenReady";
 }

@@ -25,6 +25,11 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePa
     public HomePageAdapter(String[] recipeTitles){
         mDataSet = recipeTitles;
     }
+
+    public void updateTitles(String[] recipeTitles){
+        mDataSet = recipeTitles;
+        notifyDataSetChanged();
+    }
     @Override
     public HomePageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LinearLayout parentview = (LinearLayout) LayoutInflater.from(parent.getContext())

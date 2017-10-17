@@ -84,7 +84,7 @@ public class RecipeActivityTests {
 
             onView(withId(R.id.exoplayer_view)).check(matches(not(isDisplayed())));
             String ingString = RecipeJsonHelper.getIngredientsStringForRecipe
-                    (RecipeJsonHelper.getRecipeJsonObject(CHEESECAKE_POSITION));
+                    (RecipeJsonHelper.getRecipeObject(CHEESECAKE_POSITION));
 
             onView(withText(ingString)).check(matches(isDisplayed()));
         }
@@ -104,7 +104,7 @@ public class RecipeActivityTests {
         }else{
             //Single pane
             intended(allOf(hasComponent(hasShortClassName(RECIPE_DETAILS_A_SHORTNAME)),
-                    hasExtra(RECIPE_STEP_POSITION, 7)));
+                    hasExtra(RECIPE_STEP_POSITION, 8)));
         }
     }
 
@@ -120,7 +120,7 @@ public class RecipeActivityTests {
         }else{
             //Single pane
             intended(allOf(hasComponent(hasShortClassName(RECIPE_DETAILS_A_SHORTNAME)),
-                    hasExtra(RECIPE_STEP_POSITION, 9)));
+                    hasExtra(RECIPE_STEP_POSITION, 10)));
         }
     }
     @After

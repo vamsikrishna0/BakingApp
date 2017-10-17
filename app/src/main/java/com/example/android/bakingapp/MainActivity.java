@@ -9,10 +9,13 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.android.bakingapp.Adapters.HomePageAdapter;
 import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
+import com.example.android.bakingapp.Utilities.data.Recipe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import butterknife.BindBool;
 import butterknife.BindView;
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.homepage_recycler_view)
     RecyclerView mRecyclerView;
 
-    RecyclerView.Adapter mAdapter;
+    HomePageAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     @BindBool(R.bool.isTablet)
@@ -44,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new HomePageAdapter(RecipeJsonHelper.getRecipeTitles());
+        mAdapter = new HomePageAdapter(new String[0]);
+        RecipeJsonHelper.loadAdapterData(
+                mAdapter);
         mRecyclerView.setAdapter(mAdapter);
     }
 }

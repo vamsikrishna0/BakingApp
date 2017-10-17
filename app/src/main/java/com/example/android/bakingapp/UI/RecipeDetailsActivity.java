@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.example.android.bakingapp.Fragments.RecipeDetailsFragment;
 import com.example.android.bakingapp.Fragments.RecipeTitlesFragment;
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.Utilities.data.Recipe;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,20 +26,15 @@ public class RecipeDetailsActivity extends AppCompatActivity implements OnTitleS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
-
+        ButterKnife.bind(this);
         if (savedInstanceState == null) {
             // During initial setup, plug in the details fragment.
             Bundle extras = getIntent().getExtras();
 
-            RecipeDetailsFragment details = null;
-            try {
-                details = RecipeDetailsFragment
-                        .newInstance(extras.getInt(RECIPE_STEP_POSITION),
-                                new JSONObject(extras.getString(RECIPE_JSON)),
-                                extras.getInt(NUMBER_OF_STEPS), this);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            RecipeDetailsFragment details = RecipeDetailsFragment
+                    .newInstance(extras.getInt(RECIPE_STEP_POSITION),
+                            (Recipe) extras.getSerializable(RECIPE_JSON),
+                            extras.getInt(NUMBER_OF_STEPS), this);
             getSupportFragmentManager().beginTransaction().add(R.id.content, details).commit();
         }
     }

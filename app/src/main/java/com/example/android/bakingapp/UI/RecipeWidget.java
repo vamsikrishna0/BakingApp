@@ -31,7 +31,7 @@ public class RecipeWidget extends AppWidgetProvider {
                 context.getString(R.string.pref_recipe_position_key), "0");
         int pos = Integer.parseInt(recipe_position);
         String widgetText = RecipeJsonHelper
-                .getIngredientsStringForRecipe(RecipeJsonHelper.getRecipeJsonObject(pos));
+                .getIngredientsStringForRecipe(RecipeJsonHelper.getRecipeObject(pos));
         views.setTextViewText(R.id.appwidget_text, widgetText);
 
         Intent intent = new Intent(context, RecipePreferenceActivity.class);
