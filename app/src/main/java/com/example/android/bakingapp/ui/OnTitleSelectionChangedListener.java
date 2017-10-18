@@ -1,4 +1,4 @@
-package com.example.android.bakingapp.UI;
+package com.example.android.bakingapp.ui;
 
 /**
  * Created by Vamsi on 9/28/2017.

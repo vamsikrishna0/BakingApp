@@ -1,17 +1,15 @@
-package com.example.android.bakingapp.UI;
+package com.example.android.bakingapp.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
-import com.example.android.bakingapp.Fragments.RecipeDetailsFragment;
-import com.example.android.bakingapp.Fragments.RecipeTitlesFragment;
+import com.example.android.bakingapp.fragments.RecipeDetailsFragment;
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.Utilities.data.Recipe;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.android.bakingapp.utilities.data.Recipe;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -27,6 +25,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements OnTitleS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
         ButterKnife.bind(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
             // During initial setup, plug in the details fragment.
             Bundle extras = getIntent().getExtras();
@@ -39,6 +38,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements OnTitleS
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     public void showDetails(int position) {
         Intent intent = new Intent();

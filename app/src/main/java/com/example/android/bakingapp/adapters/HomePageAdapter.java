@@ -1,4 +1,4 @@
-package com.example.android.bakingapp.Adapters;
+package com.example.android.bakingapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,25 +11,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.UI.RecipeActivity;
+import com.example.android.bakingapp.ui.RecipeActivity;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePageViewHolder> {
+public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePageViewHolder>{
     private String[] mDataSet;
     @BindString(R.string.RECIPE) public String RECIPE;
 
+    public void updateData(String[] recipeTitles){
+        mDataSet = recipeTitles;
+        notifyDataSetChanged();
+    }
     public HomePageAdapter(String[] recipeTitles){
         mDataSet = recipeTitles;
     }
 
-    public void updateTitles(String[] recipeTitles){
-        mDataSet = recipeTitles;
-        notifyDataSetChanged();
-    }
     @Override
     public HomePageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LinearLayout parentview = (LinearLayout) LayoutInflater.from(parent.getContext())

@@ -1,22 +1,21 @@
-package com.example.android.bakingapp.Fragments;
+package com.example.android.bakingapp.fragments;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.android.bakingapp.UI.OnTitleSelectionChangedListener;
+import com.example.android.bakingapp.ui.OnTitleSelectionChangedListener;
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
-import com.example.android.bakingapp.Utilities.data.Recipe;
-import com.example.android.bakingapp.Utilities.data.Step;
+import com.example.android.bakingapp.utilities.RecipeJsonHelper;
+import com.example.android.bakingapp.utilities.data.Recipe;
+import com.example.android.bakingapp.utilities.data.Step;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -28,18 +27,12 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.R.attr.thumbnail;
 
 public class RecipeDetailsFragment extends Fragment {
 

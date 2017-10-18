@@ -1,19 +1,17 @@
-package com.example.android.bakingapp.Fragments;
+package com.example.android.bakingapp.fragments;
 
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.android.bakingapp.Adapters.HomePageAdapter;
-import com.example.android.bakingapp.UI.OnTitleSelectionChangedListener;
+import com.example.android.bakingapp.ui.OnTitleSelectionChangedListener;
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
+import com.example.android.bakingapp.utilities.RecipeJsonHelper;
 
 
 public class RecipeTitlesFragment extends ListFragment {

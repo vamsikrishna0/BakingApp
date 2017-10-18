@@ -1,4 +1,4 @@
-package com.example.android.bakingapp.Utilities.networkutils;
+package com.example.android.bakingapp.utilities.networkutils;
 
 public class ApiUtils {
 

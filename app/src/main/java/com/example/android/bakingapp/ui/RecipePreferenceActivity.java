@@ -1,13 +1,10 @@
-package com.example.android.bakingapp.UI;
+package com.example.android.bakingapp.ui;
 
 import android.content.Intent;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.android.bakingapp.Fragments.RecipePreferenceFragment;
 import com.example.android.bakingapp.R;
 
 

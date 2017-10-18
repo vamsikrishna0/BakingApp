@@ -3,25 +3,18 @@ package com.example.android.bakingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
-import com.example.android.bakingapp.Adapters.HomePageAdapter;
-import com.example.android.bakingapp.UI.RecipeActivity;
-import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
+import com.example.android.bakingapp.ui.RecipeActivity;
+import com.example.android.bakingapp.utilities.RecipeJsonHelper;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import butterknife.BindString;
-import butterknife.ButterKnife;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
@@ -36,7 +29,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.android.bakingapp.MainActivityTests.CHEESECAKE_POSITION;
-import static org.hamcrest.EasyMock2Matchers.equalTo;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;

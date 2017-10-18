@@ -18,10 +18,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.RecipeActivity" />
-        <activity android:name=".UI.RecipeDetailsActivity" />
+        <activity android:name=".ui.RecipeActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>>
+        <activity android:name=".ui.RecipeDetailsActivity"
+            android:parentActivityName=".ui.RecipeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.RecipeActivity" />
+        </activity>
 
-        <receiver android:name=".UI.RecipeWidget">
+        <receiver android:name=".ui.RecipeWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -31,7 +41,7 @@
                 android:resource="@xml/recipe_widget_info" />
         </receiver>
 
-        <activity android:name=".UI.RecipePreferenceActivity"></activity>
+        <activity android:name=".ui.RecipePreferenceActivity"></activity>
     </application>
 
 </manifest>

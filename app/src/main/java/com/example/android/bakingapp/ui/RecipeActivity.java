@@ -1,19 +1,21 @@
-package com.example.android.bakingapp.UI;
+package com.example.android.bakingapp.ui;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
-import com.example.android.bakingapp.Fragments.RecipeDetailsFragment;
-import com.example.android.bakingapp.Fragments.RecipeTitlesFragment;
+import com.example.android.bakingapp.fragments.RecipeDetailsFragment;
+import com.example.android.bakingapp.fragments.RecipeTitlesFragment;
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
-import com.example.android.bakingapp.Utilities.data.Recipe;
+import com.example.android.bakingapp.utilities.RecipeJsonHelper;
+import com.example.android.bakingapp.utilities.data.Recipe;
 
 import java.io.Serializable;
 
@@ -44,6 +46,8 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
          RECIPE = getString(R.string.RECIPE);
          RECIPE_STEP_POSITION = getString(R.string.RECIPE_STEP_POSITION);
          CHEESECAKE_STEP7_STRING = getString(R.string.CHEESECAKE_STEP7_STRING);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(savedInstanceState != null){
             mRecipePosition = savedInstanceState.getInt(RECIPE_POSITION, 0);
             mNoOfRecipeSteps = savedInstanceState.getInt(NUMBER_OF_STEPS);
@@ -84,6 +88,16 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
                     .add(R.id.singlepane_container, titlesFragment).commit();
         }
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void showDetails(int recipeStepPosition) {

@@ -21,7 +21,7 @@
     <string name="CHEESECAKE_STEP7_DESC_STRING">7. Add the cream and remaining tablespoon of vanilla to the batter and beat on medium-low speed until just incorporated.\s</string>
     <string name="RECIPE_DETAILS_A_SHORTNAME">.UI.RecipeDetailsActivity</string>
     <string name="CHEESECAKE">Cheesecake</string>
-
+    <string name="thumbnail">thumbnail</string>
 
 
 </resources>

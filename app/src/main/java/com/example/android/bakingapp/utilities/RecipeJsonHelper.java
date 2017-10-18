@@ -1,14 +1,13 @@
-package com.example.android.bakingapp.Utilities;
+package com.example.android.bakingapp.utilities;
 
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.example.android.bakingapp.Adapters.HomePageAdapter;
-import com.example.android.bakingapp.Utilities.data.Ingredient;
-import com.example.android.bakingapp.Utilities.data.Recipe;
-import com.example.android.bakingapp.Utilities.data.Step;
-import com.example.android.bakingapp.Utilities.networkutils.ApiUtils;
-import com.example.android.bakingapp.Utilities.networkutils.RecipeService;
+import com.example.android.bakingapp.adapters.HomePageAdapter;
+import com.example.android.bakingapp.utilities.data.Ingredient;
+import com.example.android.bakingapp.utilities.data.Recipe;
+import com.example.android.bakingapp.utilities.data.Step;
+import com.example.android.bakingapp.utilities.networkutils.ApiUtils;
+import com.example.android.bakingapp.utilities.networkutils.RecipeService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +51,7 @@ public class RecipeJsonHelper {
 
     //Get the RecipeObject for a particular recipe
     public static Recipe getRecipeObject(int id) {
-//        List<Recipe> recipes = loadRecipes();
+//        loadData();
         return recipes.get(id);
     }
 
@@ -63,7 +62,7 @@ public class RecipeJsonHelper {
 
     //Get a string[] of description on steps for recipe at position, 'id'
     public static String[] getRecipeStepDescriptions(int id) {
-//        List<Recipe> recipes = loadRecipes();
+//        loadData();
         ArrayList<String> data = new ArrayList<>();
         data.add(INGREDIENTS);
         Recipe recipe = recipes.get(id);
@@ -76,12 +75,13 @@ public class RecipeJsonHelper {
     }
 
     public static int getNumberOfRecipeSteps(int id) {
-//        List<Recipe> recipes = loadRecipes();
+//        loadData();
         return recipes.get(id).getSteps().size();
     }
 
     //Get Titles of all recipes as a String[]
     public static String[] getRecipeTitles() {
+//        loadData();
         int len = recipes.size();
         String[] dataSet = new String[len];
         for (int i = 0; i < len; i++) {
@@ -90,35 +90,49 @@ public class RecipeJsonHelper {
         return dataSet;
     }
 
-    public static List<Recipe> loadRecipes() {
-        if (recipes == null) {
+//    public static void loadData() {
+//        if (recipes == null) {
+//            Log.i("RecipeJsonHelper", "API call");
+//        RecipeService mService = ApiUtils.getRecipeService();
+//            Response<List<Recipe>> response;
+//            try {
+//                response = mService.getRecipes().execute();
+//                recipes = response.body();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-        }
 
-        return recipes;
-    }
 
-    public static void loadAdapterData(final HomePageAdapter mAdapter) {
-        Log.i("RecipeJsonHelper", "API call");
-        RecipeService mService = ApiUtils.getRecipeService();
-        mService.getRecipes().enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if (response.isSuccessful()) {
-                    recipes = response.body();
-                    mAdapter.updateTitles(getRecipeTitles());
-                    Log.d("MainActivity", "posts loaded from API");
-                } else {
-                    int statusCode = response.code();
-                    // handle request errors depending on status code
-                    Log.d("MainActivity", "posts not loaded from API");
+    //Async call later...
+
+    public static void loadAdapterDataAfterNetworkCall(final HomePageAdapter adapter) {
+        if(recipes == null){
+            Log.i("RecipeJsonHelper", "API call");
+            RecipeService mService = ApiUtils.getRecipeService();
+            mService.getRecipes().enqueue(new Callback<List<Recipe>>() {
+                @Override
+                public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                    if (response.isSuccessful()) {
+                        recipes = response.body();
+                        adapter.updateData(getRecipeTitles());
+                        Log.d("MainActivity", "posts loaded from API");
+                    } else {
+                        int statusCode = response.code();
+                        // handle request errors depending on status code
+                        Log.d("MainActivity", "posts not loaded from API");
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Log.d("MainActivity", "error loading from API");
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                    Log.d("MainActivity", "error loading from API");
+                    t.printStackTrace();
+                }
+            });
+        }else
+            adapter.updateData(getRecipeTitles());
     }
 }

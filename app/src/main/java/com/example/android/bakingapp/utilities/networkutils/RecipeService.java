@@ -1,6 +1,6 @@
-package com.example.android.bakingapp.Utilities.networkutils;
+package com.example.android.bakingapp.utilities.networkutils;
 
-import com.example.android.bakingapp.Utilities.data.Recipe;
+import com.example.android.bakingapp.utilities.data.Recipe;
 
 import retrofit2.http.GET;
 import java.util.List;

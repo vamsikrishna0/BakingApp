@@ -1,4 +1,4 @@
-package com.example.android.bakingapp.Fragments;
+package com.example.android.bakingapp.fragments;
 
 
 import android.appwidget.AppWidgetManager;
@@ -11,7 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
+import com.example.android.bakingapp.utilities.RecipeJsonHelper;
 
 import butterknife.BindString;
 

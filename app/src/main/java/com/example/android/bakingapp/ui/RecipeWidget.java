@@ -1,4 +1,4 @@
-package com.example.android.bakingapp.UI;
+package com.example.android.bakingapp.ui;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -10,11 +10,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
-import com.example.android.bakingapp.Fragments.RecipePreferenceFragment;
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.Utilities.RecipeJsonHelper;
-
-import java.nio.charset.IllegalCharsetNameException;
+import com.example.android.bakingapp.utilities.RecipeJsonHelper;
 
 /**
  * Implementation of App Widget functionality.
