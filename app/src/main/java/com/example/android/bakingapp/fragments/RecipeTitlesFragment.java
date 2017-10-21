@@ -34,7 +34,7 @@ public class RecipeTitlesFragment extends ListFragment {
         mRecipePosition = getActivity().getIntent()
                 .getIntExtra(RECIPE, 0);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.simple_list_item,
-                RecipeJsonHelper.getRecipeStepDescriptions(mRecipePosition));
+                RecipeJsonHelper.getRecipeStepDescriptions(mRecipePosition, getActivity()));
         setListAdapter(adapter);
 
         if(savedInstanceState != null){

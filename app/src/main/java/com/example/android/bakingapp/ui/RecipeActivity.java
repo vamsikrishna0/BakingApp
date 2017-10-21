@@ -53,22 +53,9 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
             mNoOfRecipeSteps = savedInstanceState.getInt(NUMBER_OF_STEPS);
             mRecipeObj = (Recipe) savedInstanceState.getSerializable(RECIPE_JSON);
         }else{
-            if(RECIPE_STEP_POSITION == null)
-            Log.i("Blahhhh", "Not sending properly");
-            else
-                Log.i("Blahhhh", "sending properly" + RECIPE +" "+ getIntent().getExtras().getInt(RECIPE));
-            if(RECIPE == null)
-                Log.i("Blahhhh", "Not sending properly");
-            else
-                Log.i("Blahhhh", "sending properly" + RECIPE +" "+ getIntent().getExtras().getInt(RECIPE));
-            if(RECIPE_POSITION == null)
-                Log.i("Blahhhh", "Not sending properly");
-            else
-                Log.i("Blahhhh", "sending properly" + RECIPE +" "+ getIntent().getExtras().getInt(RECIPE));
-
             mRecipePosition = getIntent().getExtras().getInt(RECIPE);
-            mRecipeObj = RecipeJsonHelper.getRecipeObject(mRecipePosition);
-            mNoOfRecipeSteps = RecipeJsonHelper.getNumberOfRecipeSteps(mRecipePosition);
+            mRecipeObj = RecipeJsonHelper.getRecipeObject(mRecipePosition, this);
+            mNoOfRecipeSteps = RecipeJsonHelper.getNumberOfRecipeSteps(mRecipePosition, this);
         }
 
         //Check if dualpane mode
@@ -85,7 +72,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
         } else {
             RecipeTitlesFragment titlesFragment = new RecipeTitlesFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.singlepane_container, titlesFragment).commit();
+                    .replace(R.id.singlepane_container, titlesFragment).commit();
         }
 
     }
@@ -94,23 +81,29 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                Intent intent = NavUtils.getParentActivityIntent(this);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                NavUtils.navigateUpTo(this, intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void showDetails(int recipeStepPosition) {
-        if(recipeStepPosition < 0 || recipeStepPosition >= mNoOfRecipeSteps)
+        Log.i("RecipeActivity", recipeStepPosition +" "+mNoOfRecipeSteps);
+        if(recipeStepPosition < 0 || recipeStepPosition > mNoOfRecipeSteps)
             return;
 
         if(mDualPane){
 
             RecipeDetailsFragment details = (RecipeDetailsFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.details);
-            if(details == null || details.getShownIndex() != recipeStepPosition){
-                details = RecipeDetailsFragment.newInstance(recipeStepPosition, mRecipeObj, mNoOfRecipeSteps, this);
 
+            //Update the right fragment, i.e the fragment for the step with position ="recipeStepPosition"
+            //This statement in if, returns false when rotating the screen
+            if(details == null || details.getShownIndex() != recipeStepPosition){
+                details = RecipeDetailsFragment.newInstance(recipeStepPosition, mRecipeObj,
+                        mNoOfRecipeSteps, this);
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.details, details);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -120,7 +113,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
             Intent intent = new Intent();
             intent.setClass(this, RecipeDetailsActivity.class);
             intent.putExtra(RECIPE_STEP_POSITION, recipeStepPosition);
-            intent.putExtra(RECIPE_JSON, (Serializable) mRecipeObj);
+            intent.putExtra(RECIPE_JSON, mRecipeObj);
             intent.putExtra(NUMBER_OF_STEPS, mNoOfRecipeSteps);
             startActivityForResult(intent, REQUEST_CODE);
         }
@@ -129,7 +122,7 @@ public class RecipeActivity extends AppCompatActivity implements OnTitleSelectio
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(RECIPE_POSITION, mRecipePosition);
-        outState.putSerializable(RECIPE_JSON, (Serializable) mRecipeObj);
+        outState.putSerializable(RECIPE_JSON,  mRecipeObj);
         outState.putInt(NUMBER_OF_STEPS, mNoOfRecipeSteps);
     }
 

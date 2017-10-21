@@ -10,16 +10,17 @@
     <string name="NUMBER_OF_STEPS">number_of_steps</string>
     <string name="RECIPE_JSON">recipe_json</string>
     <string name="RECIPE_POSITION">recipe_position</string>
-    
+
     <string name="RESULT_DATA_POSITION">result_position</string>
     <string name="UPDATE_WIDGETS">update_widgets</string>
     <string name="RECIPE">recipe</string>
     <string name="RECIPE_STEP_POSITION">curChoice</string>
     <string name="CHEESECAKE_STEP7_STRING">Add heavy cream and vanilla.</string>
     <string name="CHEESECAKE_STEP9_STRING">Bake the cheesecake.</string>
-    <string name="CHEESECAKE_STEP9_DESC_STRING">9. Bake the cheesecake on a middle rack of the oven above the roasting pan full of water for 50 minutes. </string>
-    <string name="CHEESECAKE_STEP7_DESC_STRING">7. Add the cream and remaining tablespoon of vanilla to the batter and beat on medium-low speed until just incorporated.\s</string>
-    <string name="RECIPE_DETAILS_A_SHORTNAME">.UI.RecipeDetailsActivity</string>
+    <string name="CHEESECAKE_STEP9_DESC_STRING">"9. Bake the cheesecake on a middle rack of the oven above the roasting pan full of water for 50 minutes. "</string>
+    <string name="CHEESECAKE_STEP7_DESC_STRING">"7. Add the cream and remaining tablespoon of vanilla to the batter and beat on medium-low speed until just incorporated. "</string>
+    <string name="RECIPE_DETAILS_A_SHORTNAME">.ui.RecipeDetailsActivity</string>
+    <string name="RECIPE__A_SHORTNAME">.ui.RecipeActivity</string>
     <string name="CHEESECAKE">Cheesecake</string>
     <string name="thumbnail">thumbnail</string>
 

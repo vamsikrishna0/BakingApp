@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.ui.RecipeActivity;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -20,10 +22,12 @@ import butterknife.ButterKnife;
 
 public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePageViewHolder>{
     private String[] mDataSet;
+    private String[] mImageUris;
     @BindString(R.string.RECIPE) public String RECIPE;
 
-    public void updateData(String[] recipeTitles){
+    public void updateData(String[] recipeTitles, String[] imageUris){
         mDataSet = recipeTitles;
+        mImageUris = imageUris;
         notifyDataSetChanged();
     }
     public HomePageAdapter(String[] recipeTitles){
@@ -40,6 +44,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePa
     @Override
     public void onBindViewHolder(HomePageViewHolder holder, int position) {
         holder.mTextView.setText(mDataSet[position]);
+        if(!mImageUris[position].equals(""))
+        Picasso.with(holder.mContext).load(mImageUris[position]).into(holder.mImage);
     }
 
     @Override
@@ -51,8 +57,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.HomePa
         @BindString(R.string.RECIPE) public String RECIPE;
 
         private final Context mContext;
-        @BindView(R.id.homepage_textview)
-        TextView mTextView;
+        @BindView(R.id.homepage_textview) TextView mTextView;
+        @BindView(R.id.image) ImageView mImage;
         HomePageViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

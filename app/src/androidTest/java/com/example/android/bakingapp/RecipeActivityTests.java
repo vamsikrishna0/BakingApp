@@ -2,16 +2,20 @@ package com.example.android.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.example.android.bakingapp.adapters.HomePageAdapter;
 import com.example.android.bakingapp.ui.RecipeActivity;
 import com.example.android.bakingapp.utilities.RecipeJsonHelper;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.android.bakingapp.MainActivityTests.CHEESECAKE_POSITION;
+import static com.example.android.bakingapp.R.string.RECIPE_DETAILS_A_SHORTNAME;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -45,7 +50,6 @@ public class RecipeActivityTests {
     public String CHEESECAKE_STEP9_STRING = res.getString(R.string.CHEESECAKE_STEP9_STRING) ;
     private String CHEESECAKE_STEP9_DESC_STRING = res.getString(R.string.CHEESECAKE_STEP9_DESC_STRING);
     private String CHEESECAKE_STEP7_DESC_STRING = res.getString(R.string.CHEESECAKE_STEP7_DESC_STRING);
-    private static final String RECIPE_DETAILS_A_SHORTNAME= ".UI.RecipeDetailsActivity";
     @Rule
     public ActivityTestRule<RecipeActivity> mActivityRule = new ActivityTestRule<RecipeActivity>
             (RecipeActivity.class){
@@ -60,6 +64,16 @@ public class RecipeActivityTests {
     };
 
     private boolean isTablet;
+
+    @BeforeClass
+    public static void initializeClass(){
+        RecipeJsonHelper.loadFromJsonStringForTest();
+    }
+
+    @AfterClass
+    public static void releaseRes(){
+        RecipeJsonHelper.recipes = null;
+    }
 
     @Before
     public void setUp(){
@@ -76,10 +90,24 @@ public class RecipeActivityTests {
 
             onView(withId(R.id.exoplayer_view)).check(matches(not(isDisplayed())));
             String ingString = RecipeJsonHelper.getIngredientsStringForRecipe
-                    (RecipeJsonHelper.getRecipeObject(CHEESECAKE_POSITION));
+                    (RecipeJsonHelper.getRecipeObject(CHEESECAKE_POSITION, mActivityRule.getActivity()));
 
             onView(withText(ingString)).check(matches(isDisplayed()));
         }
+    }
+    @Test
+    public void checkIfStateIsMaintainedOnScreenRotation(){
+        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        checkIfTwoPanesDisplayedInTabletMode();
+        checkIfClickingOnAStep_withoutVideoURL_OpensTheProperFragment();
+    }
+    @Test
+    public void checkIfStateIsMaintainedOnScreenRotation2(){
+        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        checkIfTwoPanesDisplayedInTabletMode();
+        checkIfClickingOnAStep_withVideoURL_OpensTheProperFragment();
     }
 
     @Test
@@ -95,10 +123,12 @@ public class RecipeActivityTests {
                     .check(matches(isDisplayed()));
         }else{
             //Single pane
-            intended(allOf(hasComponent(hasShortClassName(RECIPE_DETAILS_A_SHORTNAME)),
+            intended(allOf(hasComponent(hasShortClassName(res.getString(R.string.RECIPE_DETAILS_A_SHORTNAME))),
                     hasExtra(RECIPE_STEP_POSITION, 8)));
         }
     }
+
+
 
     @Test
     public void checkIfClickingOnAStep_withoutVideoURL_OpensTheProperFragment(){
@@ -111,7 +141,7 @@ public class RecipeActivityTests {
                     .check(matches(isDisplayed()));
         }else{
             //Single pane
-            intended(allOf(hasComponent(hasShortClassName(RECIPE_DETAILS_A_SHORTNAME)),
+            intended(allOf(hasComponent(hasShortClassName(res.getString(R.string.RECIPE_DETAILS_A_SHORTNAME))),
                     hasExtra(RECIPE_STEP_POSITION, 10)));
         }
     }

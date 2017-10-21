@@ -5,6 +5,10 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.example.android.bakingapp.utilities.RecipeJsonHelper;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +40,17 @@ public class MainActivityTests {
             MainActivity.class);
 
     Resources res = getInstrumentation().getTargetContext().getResources();
+
+
+    @BeforeClass
+    public static void initializeClass(){
+        RecipeJsonHelper.loadFromJsonStringForTest();
+    }
+
+    @AfterClass
+    public static void releaseRes(){
+        RecipeJsonHelper.recipes = null;
+    }
     //Only tests cheesecake, as an example
     @Test
     public void scrollToCheeseCake_checkIfItOpensTheCorrectRecipeActivity(){
@@ -45,7 +60,7 @@ public class MainActivityTests {
         onView(allOf(withText(CHEESECAKE), withId(R.id.homepage_textview)))
                 .perform(click());
         intended(allOf(hasExtra(res.getString(R.string.RECIPE), CHEESECAKE_POSITION),
-                hasComponent(hasShortClassName(".UI.RecipeActivity"))));
+                hasComponent(hasShortClassName(res.getString(R.string.RECIPE__A_SHORTNAME)))));
     }
     @Test
     public void checkIfTheRecyclerViewHasAllRecipeNames(){

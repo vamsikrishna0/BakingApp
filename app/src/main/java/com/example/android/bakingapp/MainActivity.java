@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new HomePageAdapter(new String[0]);
-        RecipeJsonHelper.loadAdapterDataAfterNetworkCall(mAdapter);
+        RecipeJsonHelper.loadAdapterDataAfterNetworkCall(mAdapter, this);
         mRecyclerView.setAdapter(mAdapter);
     }
 }

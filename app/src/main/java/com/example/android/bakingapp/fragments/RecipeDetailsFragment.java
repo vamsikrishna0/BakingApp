@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.ui.OnTitleSelectionChangedListener;
@@ -27,6 +28,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 
@@ -41,10 +43,12 @@ public class RecipeDetailsFragment extends Fragment {
     private int mCurStepPosition = -1;
     private String mUriString;
     private String mThumbnailURL;
-    private Recipe mJson;
+    private Recipe mRecipe;
+
     @BindView(R.id.recipestep_description_view) TextView mDescriptionTextView;
     @BindView(R.id.prev_step_button) Button mPrevButton;
     @BindView(R.id.next_step_button) Button mNextButton;
+    @BindView(R.id.thumbnail) ImageView mThumbnailView;
 
     @BindView(R.id.exoplayer_view) public SimpleExoPlayerView mPlayerView;
     public SimpleExoPlayer mPlayer;
@@ -102,47 +106,56 @@ public class RecipeDetailsFragment extends Fragment {
 
         if (savedInstanceState != null) {
             mCurStepPosition = savedInstanceState.getInt(KEY_POSITION);
-            mJson = (Recipe)savedInstanceState.getSerializable(RECIPE_JSON);
+            mRecipe = (Recipe)savedInstanceState.getSerializable(RECIPE_JSON);
             playbackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION);
             currentWindow = savedInstanceState.getInt(CURRENT_WINDOW_INDEX);
             playWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
             update();
         } else if (getArguments() != null) {
             mCurStepPosition = getArguments().getInt(KEY_POSITION);
-            mJson = (Recipe) getArguments().getSerializable(RECIPE_JSON);
+            mRecipe = (Recipe) getArguments().getSerializable(RECIPE_JSON);
             update();
         }
     }
 
     public int getShownIndex() {
-        return getArguments().getInt(KEY_POSITION, 0);
+        return (mCurStepPosition != -1) ? mCurStepPosition : 0;
     }
 
 
     public void update() {
         //Update clickability of prev and next buttons
         mPrevButton.setEnabled(mCurStepPosition != 0);
-        mNextButton.setEnabled(mCurStepPosition != getArguments().getInt(NUMBER_OF_STEPS) - 1);
+        mNextButton.setEnabled(mCurStepPosition != getArguments().getInt(NUMBER_OF_STEPS));
 
         //Showing Ingredients
         if (mCurStepPosition == 0) {
             mPlayerView.setVisibility(View.GONE);
-            mDescriptionTextView.setText(RecipeJsonHelper.getIngredientsStringForRecipe(mJson));
+            mDescriptionTextView.setText(RecipeJsonHelper.getIngredientsStringForRecipe(mRecipe));
+            mThumbnailView.setVisibility(View.GONE);
             return;
         } else {
             mPlayerView.setVisibility(View.VISIBLE);
+            mThumbnailView.setVisibility(View.VISIBLE);
         }
 
         //Get the right step Json object
-        Step stepObj = RecipeJsonHelper.getRecipeStepJsonObject(mCurStepPosition, mJson);
+        Step stepObj = RecipeJsonHelper.getRecipeStepJsonObject(mCurStepPosition, mRecipe);
         String desc = stepObj.getDescription();
         mDescriptionTextView.setText(desc);
 
         setURLs(stepObj.getThumbnailURL(), stepObj.getVideoURL());
+
         if(mUriString.equals(""))
             mPlayerView.setVisibility(View.GONE);
 
         initializePlayer();
+        if(!mThumbnailURL.equals("")){
+            Picasso.with(getActivity()).load(mThumbnailURL).into(mThumbnailView);
+            mThumbnailView.setVisibility(View.VISIBLE);
+        }else
+            mThumbnailView.setVisibility(View.GONE);
+
     }
 
     public void setURLs(String thumbnailURL, String videoUrl){
@@ -208,7 +221,7 @@ public class RecipeDetailsFragment extends Fragment {
 
         // Save the current description selection in case we need to recreate the fragment
         outState.putInt(KEY_POSITION, mCurStepPosition);
-        outState.putSerializable(RECIPE_JSON, (Serializable) mJson);
+        outState.putSerializable(RECIPE_JSON, (Serializable) mRecipe);
         outState.putLong(CURRENT_PLAYBACK_POSITION, playbackPosition);
         outState.putBoolean(PLAY_WHEN_READY, playWhenReady);
         outState.putInt(CURRENT_WINDOW_INDEX, currentWindow);

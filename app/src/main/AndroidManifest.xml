@@ -18,13 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.RecipeActivity"
+        <activity
+            android:name=".ui.RecipeActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>>
-        <activity android:name=".ui.RecipeDetailsActivity"
+        </activity>
+        >
+        <activity
+            android:name=".ui.RecipeDetailsActivity"
             android:parentActivityName=".ui.RecipeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -41,7 +44,8 @@
                 android:resource="@xml/recipe_widget_info" />
         </receiver>
 
-        <activity android:name=".ui.RecipePreferenceActivity"></activity>
+        <activity android:name=".ui.RecipePreferenceActivity"
+            android:noHistory="true"/>
     </application>
 
 </manifest>

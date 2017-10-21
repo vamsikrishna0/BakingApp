@@ -9,24 +9,30 @@ import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.utilities.RecipeJsonHelper;
 
 import butterknife.BindString;
+import butterknife.ButterKnife;
+
+import static com.example.android.bakingapp.R.string.UPDATE_WIDGETS;
 
 public class RecipePreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-    @BindString(R.string.UPDATE_WIDGETS) public String UPDATE_WIDGETS;
+    public static String UPDATE_WIDGETS;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UPDATE_WIDGETS = getString(R.string.UPDATE_WIDGETS);
+//        Log.i("RecipePreferenceFrag", "UPDATE_WIDGETS "+UPDATE_WIDGETS);
 
         addPreferencesFromResource(R.xml.preference_recipe);
         ListPreference preference = (ListPreference) findPreference(
                 getString(R.string.pref_recipe_position_key));
-
+        RecipeJsonHelper.loadData(getActivity());
         String[] listentries = RecipeJsonHelper.getRecipeTitles();
         preference.setEntries(listentries);
         String[] listEntryValues = new String[listentries.length];
