@@ -14,6 +14,7 @@
 - Exoplayer - Media library
 - Espresso - Functional UI testing library
 - JUnit - Unit testing library for Java
+
 ### Other:
 - Java
 - Gradle
